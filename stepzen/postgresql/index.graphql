@@ -93,6 +93,19 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+
+  getPostListByTopic(topic:String!):[post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+        select *, "post".id as id from "post"
+        join "subreddit" on "subreddit"."id" = "post"."subreddit_id"
+        where "subreddit"."topic" = $1
+        order by "post"."created_at" desc
+      """
+      configuration: "postgresql_config"
+
+    )
   getPostUsingPost_subreddit_id_fkey(id: ID!): [post]
     @dbquery(
       type: "postgresql"
@@ -113,7 +126,10 @@ type Query {
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "post"
+      query: """
+        select * from "post"
+        order by "post"."created_at" desc
+      """
       configuration: "postgresql_config"
     )
   postPaginatedList(first: Int, after: Int): [post]
@@ -174,6 +190,7 @@ type Query {
       schema: "public"
       query: """
       SELECT "created_at", "id", "post_id", "upvote", "username" FROM "vote" WHERE "post_id" = $1
+      order by "vote"."created_at" desc
       """
       configuration: "postgresql_config"
     )

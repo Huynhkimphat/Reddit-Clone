@@ -17,19 +17,22 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
 
 function Header() {
   const { data: session } = useSession();
 
   return (
-    <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm">
+    <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm items-center">
       <div className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
-        <Image
-          objectFit="contain"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Reddit_logo_new.svg/2560px-Reddit_logo_new.svg.png"
-          layout="fill"
-          alt="Header"
-        />
+        <Link href="/">
+          <Image
+            objectFit="contain"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Reddit_logo_new.svg/2560px-Reddit_logo_new.svg.png"
+            layout="fill"
+            alt="Header"
+          />
+        </Link>
       </div>
 
       <div className="mx-7 flex items-center xl:min-w-[300px]">
@@ -68,9 +71,8 @@ function Header() {
       </div>
 
       {/* Sign in/ Sign Out Button */}
-      {
-        session ? (
-          <div
+      {session ? (
+        <div
           onClick={() => signOut()}
           className="hidden lg:flex items-center space-x-2 border border-gray-100 p-2 cursor-pointer"
         >
@@ -82,13 +84,13 @@ function Header() {
             />
           </div>
           <div className="flex-1 text-xs">
-          <p className="truncate">{session?.user?.name}</p>
-          <p className="text-gray-400">1 Karma</p>
+            <p className="truncate">{session?.user?.name}</p>
+            <p className="text-gray-400">1 Karma</p>
           </div>
-          <ChevronDownIcon className="h-5 flex-shrink-0 text-gray-400"/>
+          <ChevronDownIcon className="h-5 flex-shrink-0 text-gray-400" />
         </div>
-        ) : (
-          <div
+      ) : (
+        <div
           onClick={() => signIn()}
           className="hidden lg:flex items-center space-x-2 border border-gray-100 p-2 cursor-pointer"
         >
@@ -101,9 +103,7 @@ function Header() {
           </div>
           <p className="text-gray-400">Sign In</p>
         </div>
-        )
-      }
-   
+      )}
     </div>
   );
 }
